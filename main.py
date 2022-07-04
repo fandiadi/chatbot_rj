@@ -89,7 +89,7 @@ if selected == "Dataset":
                          target_label='jenis_poli')
         st.write('------------------------')
         # st.write(model)
-        st.write('Classification running...')
+        st.write('Proses running...')
         st.write('Build Decision Tree...')
         # hasil = evaluate.evaluate(df_gains)
         # st.write(hasil)
