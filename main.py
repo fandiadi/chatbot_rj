@@ -27,6 +27,7 @@ df = pd.read_csv("./dataset/dataset7.csv",
 df_dump = df.copy()
 df_tree = df_dump.copy()
 df_gains = df_dump.copy()
+df_result = df_dump.copy()
 config_gain = {'algorithm': 'ID3'}
 config = {'algorithm': 'C4.5'}
 le = preprocessing.LabelEncoder()
@@ -35,7 +36,27 @@ labels_name = ['Bedah', 'Bedah Mulut', 'Bedah Syaraf', 'Bedah Tulang atau Orthop
                'Kesehatan Jiwa', 'Kulit & Kelamin', 'Mata', 'Paru-paru', 'Penyakit Dalam', 'Rehabilitasi Medik', 'Skin Care', 'Sub Spesialis Bedah Anak', 'Sub Spesialis Bedah Tumor (Onkologi)', 'Sub Spesialis Onkologi Ginekologi', 'Syaraf', 'THT', 'Tumbuh Kembang Anak (REMEDIA)']
 
 
-# Main
+def view_dataset():
+    df = pd.DataFrame(database.query(), columns=atribut)
+    st.dataframe(df.head())
+
+
+def run_algo():
+    df_gains.rename(columns={'jenis_poli': 'Decision'}, inplace=True)
+    gains = Training.findGains(df_gains, config_gain)
+    st.write(gains)
+
+    # model = chef.fit(df_dump.copy(), config=config,
+    #                 target_label='jenis_poli')
+    st.write('------------------------')
+    # st.write(model)
+    st.write('Proses running...')
+    st.write('Build Decision Tree...')
+    # hasil = evaluate.evaluate(df_gains)
+    # st.write(hasil)
+
+
+    # Main
 st.title('Chatbot RJ')
 with st.sidebar:
     selected = option_menu(
@@ -49,8 +70,7 @@ if selected == "Dataset":
                'keluhan_2', 'keluhan_3', 'jenis_poli']
 
     # View Table Data
-    df = pd.DataFrame(database.query(), columns=atribut)
-    st.dataframe(df.head())
+    view_dataset()
     col1, col2 = st.columns(2)
 
     instance_jk = df['jk'].unique()
@@ -81,18 +101,7 @@ if selected == "Dataset":
 
     if st.button('Run Training C4.5'):
         st.write('--RESULT--')
-        df_gains.rename(columns={'jenis_poli': 'Decision'}, inplace=True)
-        gains = Training.findGains(df_gains, config_gain)
-        st.write(gains)
-
-        model = chef.fit(df_dump.copy(), config=config,
-                         target_label='jenis_poli')
-        st.write('------------------------')
-        # st.write(model)
-        st.write('Proses running...')
-        st.write('Build Decision Tree...')
-        # hasil = evaluate.evaluate(df_gains)
-        # st.write(hasil)
+        run_algo()
 
 
 if selected == "Predict":
