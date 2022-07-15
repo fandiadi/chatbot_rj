@@ -46,15 +46,14 @@ def run_algo():
     gains = Training.findGains(df_gains, config_gain)
     st.write(gains)
 
-    # model = chef.fit(df_dump.copy(), config=config,
-    #                 target_label='jenis_poli')
+    model = chef.fit(df_dump.copy(), config=config,
+                     target_label='jenis_poli')
     st.write('------------------------')
     # st.write(model)
     st.write('Proses running...')
     st.write('Build Decision Tree...')
     # hasil = evaluate.evaluate(df_gains)
     # st.write(hasil)
-
 
     # Main
 st.title('Chatbot RJ')
@@ -151,9 +150,3 @@ if selected == "Tree":
 
     with open("./outputs/rules/regression/rule.txt") as file:
         st.code(file.read(), language='python')
-
-    # st.code(file.readlines())
-
-    # view_tree = pd.DataFrame("outputs/rules/regression/rules.py")
-    # st.dataframe(view_tree)
-    # st.json(json)
