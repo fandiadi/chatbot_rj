@@ -128,7 +128,7 @@ if selected == "Predict":
                 'Keluhan 3', max_chars=40, value="TIDAK ADA").upper()
         with col2:
             usia = st.radio(
-                "Usia",
+                "Kategori Usia",
                 ('dewasa', 'anak')
             )
             keluhan_2 = st.text_input(
@@ -136,11 +136,23 @@ if selected == "Predict":
 
         submit = st.form_submit_button("OK")
         if submit:
-            result = labels_name[int(myrules.findDecision(
-                [jk, usia, keluhan_1, keluhan_2, keluhan_3]))]
-            st.write("Jenis Kelamin = ", jk, " | ", "Usia = ", usia, " | ", "Keluhan 1 = ",
-                     keluhan_1, " | ", "Keluhan 2 = ", keluhan_2, " | ", "Keluhan 3 = ", keluhan_3)
-            st.write("Prediction Poli Service = ", result)
+            aturan = ["HAMIL", "KEHAMILAN", "KB", "KANDUNGAN"]
+            if (jk == "Laki-laki" and usia == "dewasa" and keluhan_1 in aturan):
+                st.write('Invalid Input!')
+            elif(keluhan_1 == ''):
+                st.write('Keluhan 1 is Empty')
+            elif(keluhan_2 == '' or keluhan_2 in aturan):
+                st.write('Keluhan 2 is Invalid')
+            elif(keluhan_3 == '' or keluhan_3 in aturan):
+                st.write('Keluhan 3 is Invalid')
+            else:
+                #st.write('input valid')
+                result = labels_name[int(myrules.findDecision(
+                    [jk, usia, keluhan_1, keluhan_2, keluhan_3]))]
+                st.write("Jenis Kelamin = ", jk, " | ", "Kategori Usia = ", usia, " | ", "Keluhan 1 = ",
+                         keluhan_1, " | ", "Keluhan 2 = ", keluhan_2, " | ", "Keluhan 3 = ", keluhan_3)
+                st.write('-------------------------------')
+                st.write("Prediction Poli Service = ", result)
 
     # f.to_excel("./dataset/hasil_pre.xlsx")
 

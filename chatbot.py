@@ -1,7 +1,6 @@
 from telebot import *
 from chefboost import Chefboost as chef
 import pandas as pd
-import streamlit as st
 from sklearn import preprocessing
 import imp
 #from app.database import database
@@ -38,9 +37,9 @@ def selamat_datang(message):
         message, 'Welcome to the Outpatient Poly Selection {} '.format(f_nama))
     bot.reply_to(
         message, """\
-Please fill in the Format /poli[space]*"JK"*"USIA"*"Keluhan1"*"Keluhan2"*"Keluhan3"
+Please fill in the Format /poli[space]*"GENDER"*"AGE CATEGORY"*"COMPLAINT 1"*"COMPLAINT 2"*"COMPLAINT 3"
 
-If No complaints 2 and 3, then just type "TIDAK ADA"
+If complaints 2 and 3 is empty, then just type "TIDAK ADA"
 Ex : 
 /poli *Laki-laki*anak*BATUK*TIDAK ADA*TIDAK ADA
 """)
@@ -60,13 +59,24 @@ def pemilihan_poli(message):
     keluhan_1 = teks[3]
     keluhan_2 = teks[4]
     keluhan_3 = teks[5]
-    mylist = [jk, usia.lower(), keluhan_1.upper(), keluhan_2.upper(),
-              keluhan_3.upper()]
-    result = labels_name[int(myrules.findDecision(
-        [mylist[0], mylist[1], mylist[2], mylist[3], mylist[4]]))]
-    print(mylist)
-    bot.reply_to(
-        message, 'The appropriate type of Poly Service is = {} '.format(result))
+    if(jk == ''):
+        bot.reply_to(message, 'Gender is Empty')
+    elif (usia == ''):
+        bot.reply_to(message, 'Age Category is Empty')
+    elif (keluhan_1 == ''):
+        bot.reply_to(message, 'Complaint 1 is Empty')
+    elif (keluhan_2 == ''):
+        bot.reply_to(message, 'Complaint 2 is Empty')
+    elif (keluhan_3 == ''):
+        bot.reply_to(message, 'Complaint 3 is Empty')
+    else:
+        mylist = [jk, usia.lower(), keluhan_1.upper(), keluhan_2.upper(),
+                  keluhan_3.upper()]
+        result = labels_name[int(myrules.findDecision(
+            [mylist[0], mylist[1], mylist[2], mylist[3], mylist[4]]))]
+        print(mylist)
+        bot.reply_to(
+            message, 'The appropriate type of Poly Service is = {} '.format(result))
 
 
 bot.infinity_polling()
